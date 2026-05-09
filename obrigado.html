@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Obrigado pela compra — Arquiteto do Tempo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #0A0A0A;
+  --surface: #141414;
+  --border:  #2D2D2D;
+  --border2: #3A3A3A;
+  --fg:      #FFFFFF;
+  --muted:   #888888;
+  --muted2:  #555555;
+  --gold:    #F2A900;
+  --gold-lt: #FFD166;
+  --gold-dim:rgba(242,169,0,0.10);
+  --green:   #10B981;
+  --font: 'Inter', -apple-system, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  background-image:
+    radial-gradient(ellipse at 50% 0%, rgba(242,169,0,0.08) 0%, transparent 55%),
+    linear-gradient(to right,  rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: auto, 60px 60px, 60px 60px;
+  color: var(--fg);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* top gold bar */
+body::before {
+  content: '';
+  display: block;
+  height: 3px;
+  background: var(--gold);
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+}
+
+.page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px 64px;
+  max-width: 640px;
+  margin: 0 auto;
+  width: 100%;
+  text-align: center;
+}
+
+/* ── Check animado ── */
+.check-wrap {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: rgba(16,185,129,0.12);
+  border: 2px solid rgba(16,185,129,0.4);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 28px;
+  animation: pop-in 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+.check-wrap svg { animation: draw-check 0.4s ease 0.3s both; }
+
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(0.5); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes draw-check {
+  from { stroke-dashoffset: 40; opacity: 0; }
+  to   { stroke-dashoffset: 0;  opacity: 1; }
+}
+
+.eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--green); margin-bottom: 12px;
+}
+
+h1 {
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 900; letter-spacing: -0.03em; line-height: 1.1;
+  margin-bottom: 16px;
+}
+h1 em { color: var(--gold); font-style: normal; }
+
+.sub {
+  font-size: 16px; color: var(--muted); line-height: 1.65;
+  max-width: 480px; margin: 0 auto 40px;
+}
+
+/* ── Passos seguintes ── */
+.steps-card {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 28px;
+  text-align: left;
+}
+.steps-head {
+  padding: 14px 22px;
+  border-bottom: 1px solid var(--border);
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--gold);
+}
+.step-row {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--border);
+}
+.step-row:last-child { border-bottom: none; }
+.step-num {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  background: var(--gold-dim); border: 1.5px solid rgba(242,169,0,0.35);
+  color: var(--gold); font-size: 12px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 1px;
+}
+.step-content {}
+.step-title { font-size: 14px; font-weight: 700; color: var(--fg); margin-bottom: 2px; }
+.step-desc  { font-size: 12px; color: var(--muted); line-height: 1.55; }
+.step-desc a { color: var(--gold); text-decoration: none; }
+.step-desc a:hover { text-decoration: underline; }
+
+/* ── Botões ── */
+.btn-group {
+  display: flex; flex-direction: column; gap: 10px; width: 100%;
+}
+.btn-primary {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 15px 24px; background: var(--gold); border: none; border-radius: 10px;
+  font-family: var(--font); font-size: 15px; font-weight: 800; color: #000;
+  cursor: pointer; text-decoration: none; transition: all 0.15s;
+}
+.btn-primary:hover { background: var(--gold-lt); transform: translateY(-1px); }
+.btn-secondary {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 13px 24px; background: transparent;
+  border: 1px solid var(--border2); border-radius: 10px;
+  font-family: var(--font); font-size: 14px; font-weight: 600; color: var(--muted);
+  cursor: pointer; text-decoration: none; transition: all 0.15s;
+}
+.btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+/* ── Nota de entrega ── */
+.delivery-note {
+  margin-top: 28px; padding: 14px 18px;
+  background: var(--gold-dim);
+  border: 1px solid rgba(242,169,0,0.2);
+  border-radius: 8px;
+  font-size: 13px; color: var(--muted); line-height: 1.6;
+  text-align: left; width: 100%;
+}
+.delivery-note strong { color: var(--gold); }
+
+/* ── Footer ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 20px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 11px; color: var(--muted2);
+}
+.footer-brand b { color: var(--gold); }
+
+@media (max-width: 520px) {
+  .page { padding: 64px 20px 48px; }
+  footer { flex-direction: column; gap: 6px; text-align: center; padding: 16px 20px; }
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="check-wrap">
+    <svg width="36" height="36" viewBox="0 0 36 36" fill="none"
+         stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+         stroke-dasharray="40" stroke-dashoffset="40">
+      <polyline points="7,18 15,26 29,10"/>
+    </svg>
+  </div>
+
+  <div class="eyebrow">Compra confirmada</div>
+  <h1>Kit recebido.<br><em>Agora é só abrir e usar.</em></h1>
+  <p class="sub">O link de download foi enviado para o seu email. Confira a caixa de entrada — e o spam, por precaução.</p>
+
+  <div class="steps-card">
+    <div class="steps-head">O que fazer agora — 3 passos</div>
+    <div class="step-row">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <div class="step-title">Baixe e extraia o ZIP</div>
+        <div class="step-desc">Clique no link do email, salve o arquivo e extraia a pasta. Todos os arquivos precisam ficar juntos na mesma pasta para funcionar corretamente.</div>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <div class="step-title">Assista ao vídeo de 10 minutos</div>
+        <div class="step-desc">Antes de começar, veja o walkthrough completo — <a href="LINK_VIDEO_YOUTUBE" target="_blank">acessar vídeo →</a>. Em 10 minutos você vai do checklist ao relatório final.</div>
+      </div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <div class="step-title">Abra o checklist e comece</div>
+        <div class="step-desc">Abra o arquivo <strong style="color:var(--fg)">ai-security-checklist.html</strong> no Chrome. Reúna a equipe técnica, responda os 25 itens e envie os riscos para a matriz com um clique.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-group">
+    <a href="LINK_VIDEO_YOUTUBE" target="_blank" class="btn-primary">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><polygon points="6,4 13,8 6,12" fill="currentColor"/></svg>
+      Assistir ao vídeo "Como Usar"
+    </a>
+    <a href="mailto:jpaulino@arquitetodotempo.com" class="btn-secondary">
+      Preciso de ajuda → jpaulino@arquitetodotempo.com
+    </a>
+  </div>
+
+  <div class="delivery-note">
+    <strong>Não recebeu o email?</strong> Verifique a pasta de spam. Se não estiver lá, entre em contato pelo email acima com o assunto <em>"Kit LGPD — não recebi"</em> e o número do pedido.
+  </div>
+
+</div>
+
+<footer>
+  <span class="footer-brand"><b>Arquiteto do Tempo</b> · Kit de Segurança IA + LGPD</span>
+  <span>jpaulino@arquitetodotempo.com</span>
+</footer>
+
+</body>
+</html>
