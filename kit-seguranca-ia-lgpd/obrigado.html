@@ -245,5 +245,23 @@ footer {
   <span>jpaulino@arquitetodotempo.com</span>
 </footer>
 
+<script>
+// Order Completed — ao chegar à página de obrigado
+window.addEventListener('load', function () {
+  if (typeof zaraz !== 'undefined') {
+    zaraz.ecommerce('Order Completed', {
+      order_id: 'kit-' + Date.now(),
+      currency: 'BRL',
+      value: 197,
+      products: [{
+        product_id: 'kit-seguranca-ia-lgpd',
+        name: 'Kit de Segurança IA + LGPD',
+        price: 197,
+        quantity: 1
+      }]
+    });
+  }
+});
+</script>
 </body>
 </html>

@@ -658,6 +658,40 @@ footer::after {
 function toggleFaq(el) {
   el.closest('.faq-item').classList.toggle('open');
 }
+
+const PRODUCT = {
+  product_id: 'kit-seguranca-ia-lgpd',
+  name: 'Kit de Segurança IA + LGPD',
+  price: 197,
+  quantity: 1
+};
+
+// Product Viewed — ao carregar a página
+window.addEventListener('load', function () {
+  if (typeof zaraz !== 'undefined') {
+    zaraz.ecommerce('Product Viewed', {
+      currency: 'BRL',
+      value: PRODUCT.price,
+      products: [PRODUCT]
+    });
+  }
+});
+
+// Checkout Started — nos botões que abrem o Kiwify
+function trackCheckout() {
+  if (typeof zaraz !== 'undefined') {
+    zaraz.ecommerce('Checkout Started', {
+      step: 1,
+      currency: 'BRL',
+      value: PRODUCT.price,
+      products: [PRODUCT]
+    });
+  }
+}
+
+document.querySelectorAll('a[href*="kiwify"]').forEach(function (btn) {
+  btn.addEventListener('click', trackCheckout);
+});
 </script>
 </body>
 </html>
