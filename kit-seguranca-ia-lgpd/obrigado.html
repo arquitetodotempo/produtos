@@ -247,17 +247,22 @@ footer {
 
 <script>
 // Order Completed — ao chegar à página de obrigado
+// order_id vem da Kiwify via query string para deduplicação com o CAPI (server-side)
 window.addEventListener('load', function () {
+  var params   = new URLSearchParams(window.location.search);
+  var orderId  = params.get('order_id') || ('kit-' + Date.now());
+  var value    = parseFloat(params.get('value')) || 197;
+
   if (typeof zaraz !== 'undefined') {
     zaraz.ecommerce('Order Completed', {
-      order_id: 'kit-' + Date.now(),
+      order_id: orderId,
       currency: 'BRL',
-      value: 197,
+      revenue:  value,
       products: [{
         product_id: 'kit-seguranca-ia-lgpd',
-        name: 'Kit de Segurança IA + LGPD',
-        price: 197,
-        quantity: 1
+        name:       'Kit de Segurança IA + LGPD',
+        price:      value,
+        quantity:   1
       }]
     });
   }
