@@ -308,6 +308,43 @@ footer::after {
   .tools-grid { grid-template-columns: 1fr; }
   footer { flex-direction: column; gap: 8px; text-align: center; }
 }
+
+/* ── Cookie Consent ── */
+.cookie-consent {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  width: min(640px, calc(100vw - 32px));
+  background: #1a1a1a; border: 1px solid #3a3a3a; border-radius: 14px;
+  padding: 24px; z-index: 9999;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+  display: flex; flex-direction: column; gap: 16px;
+}
+.cookie-consent__eyebrow {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: #F2A900; margin-bottom: 4px;
+}
+.cookie-consent__copy h2 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+.cookie-consent__copy p  { font-size: 13px; color: #888; line-height: 1.5; }
+.cookie-consent__panel { display: flex; flex-direction: column; gap: 10px; }
+.cookie-consent__option {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 13px; cursor: pointer;
+}
+.cookie-consent__option.is-disabled { opacity: 0.45; cursor: default; }
+.cookie-consent__option input { margin-top: 3px; accent-color: #F2A900; }
+.cookie-consent__option strong { display: block; color: #fff; font-size: 13px; }
+.cookie-consent__option small  { color: #888; font-size: 11px; }
+.cookie-consent__actions {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px;
+}
+.cookie-consent__actions button {
+  flex: 1; min-width: 100px; padding: 9px 14px; border-radius: 8px;
+  font-size: 13px; font-weight: 600; cursor: pointer; border: none;
+  transition: opacity 0.15s;
+}
+.cookie-consent__actions button:hover { opacity: 0.85; }
+.cookie-consent__actions [data-cookie-reject]  { background: #2d2d2d; color: #888; }
+.cookie-consent__actions [data-cookie-save]    { background: #2d2d2d; color: #fff; }
+.cookie-consent__actions [data-cookie-accept]  { background: #F2A900; color: #000; }
 </style>
 </head>
 <body>
@@ -692,6 +729,69 @@ function trackCheckout() {
 document.querySelectorAll('a[href*="kiwify"]').forEach(function (btn) {
   btn.addEventListener('click', trackCheckout);
 });
+</script>
+
+<script>
+// ── Consent banner (Zaraz) — purposes: sVdY=Análise, Bsra=Marketing ──
+var defaultConsent = { necessary: true, analytics: false, marketing: false };
+
+var readConsent = function() {
+  if (typeof zaraz === 'undefined' || !zaraz.consent) return null;
+  var a = zaraz.consent.get('sVdY');
+  var m = zaraz.consent.get('Bsra');
+  if (a === undefined && m === undefined) return null;
+  return { necessary: true, analytics: Boolean(a), marketing: Boolean(m) };
+};
+
+var applyConsent = function(prefs) {
+  if (typeof zaraz !== 'undefined' && zaraz.consent) {
+    zaraz.consent.set({ sVdY: prefs.analytics, Bsra: prefs.marketing });
+  }
+};
+
+var saveConsent = function(prefs) {
+  var normalized = { necessary: true, analytics: Boolean(prefs.analytics), marketing: Boolean(prefs.marketing) };
+  applyConsent(normalized);
+  var el = document.querySelector('.cookie-consent');
+  if (el) el.remove();
+};
+
+var createConsentBanner = function(initial) {
+  initial = initial || defaultConsent;
+  var existing = document.querySelector('.cookie-consent');
+  if (existing) existing.remove();
+  var banner = document.createElement('section');
+  banner.className = 'cookie-consent';
+  banner.setAttribute('aria-label', 'Preferências de cookies');
+  banner.innerHTML =
+    '<div class="cookie-consent__copy">' +
+      '<p class="cookie-consent__eyebrow">Privacidade</p>' +
+      '<h2>Este site usa cookies.</h2>' +
+      '<p>Usamos cookies necessários para o funcionamento do site e, com a sua autorização, cookies de análise e marketing para medir visitas e melhorar campanhas.</p>' +
+    '</div>' +
+    '<form class="cookie-consent__panel">' +
+      '<label class="cookie-consent__option is-disabled"><input type="checkbox" checked disabled /><span><strong>Necessários</strong><small>Sempre ativos para segurança e funcionamento básico.</small></span></label>' +
+      '<label class="cookie-consent__option"><input type="checkbox" name="analytics"' + (initial.analytics ? ' checked' : '') + ' /><span><strong>Análise</strong><small>Mede visitas e interações para melhorar o site.</small></span></label>' +
+      '<label class="cookie-consent__option"><input type="checkbox" name="marketing"' + (initial.marketing ? ' checked' : '') + ' /><span><strong>Marketing</strong><small>Permite medir campanhas e fontes de tráfego.</small></span></label>' +
+      '<div class="cookie-consent__actions">' +
+        '<button type="button" data-cookie-reject>Rejeitar</button>' +
+        '<button type="submit" data-cookie-save>Salvar</button>' +
+        '<button type="button" data-cookie-accept>Aceitar todos</button>' +
+      '</div>' +
+    '</form>';
+
+  var form = banner.querySelector('form');
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    saveConsent({ necessary: true, analytics: form.elements.analytics.checked, marketing: form.elements.marketing.checked });
+  });
+  banner.querySelector('[data-cookie-reject]').addEventListener('click', function() { saveConsent(defaultConsent); });
+  banner.querySelector('[data-cookie-accept]').addEventListener('click', function() { saveConsent({ necessary: true, analytics: true, marketing: true }); });
+  document.body.appendChild(banner);
+};
+
+var stored = readConsent();
+if (stored) { applyConsent(stored); } else { createConsentBanner(); }
 </script>
 </body>
 </html>
